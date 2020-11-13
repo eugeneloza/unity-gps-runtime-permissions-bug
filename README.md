@@ -8,4 +8,4 @@ To reproduce the bug:
 4. Restart the app. GPS location is not available.
 5. Restart the app. GPS location is available and will be available for all subsequent runs.
 
-Fixed through  https://forum.unity.com/threads/runtime-permissions-do-not-work-for-gps-location-first-two-runs.1005001/#post-6520438 thanks to @Tomas1856
+Fixed through  https://forum.unity.com/threads/runtime-permissions-do-not-work-for-gps-location-first-two-runs.1005001/#post-6520438 thanks to @Tomas1856 and @JuliusM

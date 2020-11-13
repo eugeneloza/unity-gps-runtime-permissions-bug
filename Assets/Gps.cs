@@ -13,15 +13,11 @@ public class Gps : MonoBehaviour
   private void RequestPermissions()
   {
     #if UNITY_ANDROID && !UNITY_EDITOR
-    if (!Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
-    {
-      Permission.RequestUserPermission(Permission.CoarseLocation);
-    }
-    if (Permission.HasUserAuthorizedPermission(Permission.CoarseLocation) && !Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+    if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
     {
       Permission.RequestUserPermission(Permission.FineLocation);
     }
-    if (needsStartGPS && Permission.HasUserAuthorizedPermission(Permission.CoarseLocation) && Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+    if (needsStartGPS && Permission.HasUserAuthorizedPermission(Permission.FineLocation))
     {
       Input.location.Start();
       Input.compass.enabled = true;

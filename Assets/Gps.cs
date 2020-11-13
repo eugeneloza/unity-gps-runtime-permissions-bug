@@ -8,27 +8,32 @@ public class Gps : MonoBehaviour
 {
   public Text text;
   private int currentRun;
-  
-  #if UNITY_ANDROID && !UNITY_EDITOR
+  private bool needsStartGPS = true;
+
   private void RequestPermissions()
   {
-    if (!Permission.HasUserAuthorizedPermission(Permission.CoarseLocation) || !Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+    #if UNITY_ANDROID && !UNITY_EDITOR
+    if (!Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
     {
       Permission.RequestUserPermission(Permission.CoarseLocation);
+    }
+    if (Permission.HasUserAuthorizedPermission(Permission.CoarseLocation) && !Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+    {
       Permission.RequestUserPermission(Permission.FineLocation);
     }
-    Input.location.Start();
-    Input.compass.enabled = true;
-    Input.gyro.enabled = true;
-    Input.compensateSensors = true;
+    if (needsStartGPS && Permission.HasUserAuthorizedPermission(Permission.CoarseLocation) && Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+    {
+      Input.location.Start();
+      Input.compass.enabled = true;
+      Input.gyro.enabled = true;
+      Input.compensateSensors = true;
+      needsStartGPS = false;
+    }
+    #endif
   }
-  #endif
 
   void Start()
   {
-    #if UNITY_ANDROID && !UNITY_EDITOR
-    RequestPermissions();
-    #endif
     currentRun = PlayerPrefs.GetInt("current_run", 0);
     currentRun++;
     PlayerPrefs.SetInt("current_run", currentRun);
@@ -36,12 +41,7 @@ public class Gps : MonoBehaviour
 
   void Update()
   {
-    #if UNITY_ANDROID && !UNITY_EDITOR
-    if (!Input.location.isEnabledByUser)
-    {
-      RequestPermissions();
-    }
-    #endif
+    RequestPermissions();
     text.text =
       "Current run = " + currentRun.ToString() + "\n" +
       "Permissions given = " + Input.location.isEnabledByUser.ToString() + "\n" +
